@@ -22,11 +22,12 @@ print(f'[*] listening on {args.bind}:{args.port}')
 
 
 # this defines our client handling thread
-def handle_client(client_socket):
+def handle_client(client_socket,addr):
 
     # print out what client sends:
     request = client_socket.recv(1024)
-    print(f'[*] received: {request.decode("utf-8")}')
+    print(f'[*] received from: {addr[0]}:{addr[1]}')
+    print(f'{request.decode("utf-8").rstrip()}')
 
     # send ack
     msg = f'ack: {request.decode("utf-8")}'
@@ -44,5 +45,5 @@ while True:
 
     # call handler for this connection, spinning off a new thread to handle it
     # so the main thread can go back to listening for new connections
-    client_handler = threading.Thread(target=handle_client, args=(client,))
+    client_handler = threading.Thread(target=handle_client, args=(client,addr))
     client_handler.start()
