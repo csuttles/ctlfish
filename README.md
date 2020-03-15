@@ -12,15 +12,15 @@
    ░ ░                   ░  ░        ░        ░   ░  ░  ░
    ░
 ```
-## What is this?
+## What is this
 
 This is a fun repo for doing little development doodles that are useful or interesting to me in some way.
 
-## Who is it for?
+## Who is it for
 
 It's mostly for me, but also for everyone.
 
-## License?
+## License
 
 IANAL - [MIT license](https://opensource.org/licenses/MIT)
 
