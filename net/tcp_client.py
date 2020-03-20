@@ -5,8 +5,8 @@ import sys
 import socket
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-H', '--host', type=str, metavar='host', default=None, help='IP addr of host')
-parser.add_argument('-p', '--port', type=int, metavar='port', default=80, help='TCP port')
+parser.add_argument('-H', '--host', type=str, dest='host', default=None, help='IP addr of host')
+parser.add_argument('-p', '--port', type=int, dest='port', default=80, help='TCP port')
 args = parser.parse_args()
 
 print(f"Connecting to: {args.host}:{args.port}")

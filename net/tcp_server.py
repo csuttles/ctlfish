@@ -6,8 +6,8 @@ import socket
 import threading
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-b', '--bind', type=str, metavar='bind', default='0.0.0.0', help='bind address')
-parser.add_argument('-p', '--port', type=int, metavar='port', default=8000, help='TCP port')
+parser.add_argument('-b', '--bind', type=str, dest='bind', default='0.0.0.0', help='bind address')
+parser.add_argument('-p', '--port', type=int, dest='port', default=8000, help='TCP port')
 args = parser.parse_args()
 
 # create instance of socket object named "server"
