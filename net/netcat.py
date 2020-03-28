@@ -58,13 +58,6 @@ def client_handler(client_socket,addr):
             cmd_buffer = bytes()
             while '\n' not in cmd_buffer.decode('utf-8'):
                 cmd_buffer += client_socket.recv(1024)
-            # while True:
-            #     buf = client_socket.recv(4096)
-            #     if '\n' in str(buf.decode('utf-8')):
-            #         cmd_buffer += buf
-            #         break
-            #     else:
-            #         cmd_buffer += buf
 
             # run the command and set output as response
             print(f'running command: {cmd_buffer.decode("utf-8")}', end='')
@@ -159,7 +152,7 @@ def run_command(cmd):
     except ChildProcessError as ex:
         output = f"Failed to execute:\n{cmd}\nCaught exception:\n{ex.__repr__()}"
         # raise ChildProcessError
-        # don't actually raise this, just log so we don't break things.
+        # don't actually raise this, just log so we can keep running and accept commands again from a new connection
     return output
 
 
