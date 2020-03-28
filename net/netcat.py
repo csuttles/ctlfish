@@ -11,10 +11,8 @@ parser = argparse.ArgumentParser(sys.argv[0])
 parser.add_argument('-t', '--target', type=str, dest='target', default='0.0.0.0', help='target')
 parser.add_argument('-p', '--port', type=int, dest='port', default=443, help='TCP port')
 parser.add_argument('-l', '--listen', action='store_true', dest='listen', default=False, help='listen for connections')
-parser.add_argument('-c', '--command', action='store_true', dest='command', default=False,
-                    help='launch an interactive command shell')
-parser.add_argument('-e', '--execute', type=str, dest='exec', default='', help='execute a one shot command')
-parser.add_argument('-u', '--upload', type=str, dest='upload', default='', help='upload this file')
+parser.add_argument('-e', '--execute', action='store_true', dest='command', default=False,
+                    help='execute commands or emulate an interactive command shell')
 parser.add_argument('-f', '--file-dest', type=str, dest='filedest', default='', help='file destination')
 parser.description = """\
 This is a Python program to do things you might normally do with netcat.
@@ -22,29 +20,13 @@ This is a Python program to do things you might normally do with netcat.
 The idea is that this (or parts of it) are usable (or re-usable) in environments where you don't have netcat,
 but you *do* have Python.
 """
-# parser.epilog = '''\
-# Examples:
-#
-# Upload local file ~/www/winbin/exploit.exe to 10.10.10.10 over port 443 and write to c:\exploit.exe on 10.10.10.10
-#
-#
-# ./netcat.py -t 10.10.10.10 -p 443 -u ~/www/winbin/exploit.exe -f c:\exploit.exe
-#
-#
-# Listen on port 443 and write a local file
-#
-# ./netcat.py -l -p 443 -f /tmp/somefile.txt
-# '''
 args = parser.parse_args()
 
 
 def client_handler(client_socket,addr):
     # check for upload mode
     if len(args.filedest):
-        # make sure we have a path to write the file we are getting
-        if not len(args.upload):
-            print(f'Could not upload, no -u file specified.')
-            sys.exit(1)
+
         # make a string var as a buffer
         file_buffer = bytes()
         while True:
@@ -59,16 +41,9 @@ def client_handler(client_socket,addr):
                 with open(args.filedest, 'wb') as filedest:
                     filedest.write(file_buffer)
 
-                client_socket.send(f'File uploaded successfully to: {args.filedest}')
+                print(f'Client: {addr[0]}:{addr[1]} uploaded successfully to: {args.filedest}')
             except Exception as ex:
-                client_socket.send(f'Failed to upload to: {args.filedest}\nCaught exception: {ex}')
-
-    # check for exec mode
-    if len(args.exec):
-        # run the command
-        output = run_command(args.exec)
-
-        client_socket.send(bytes(output))
+                print(f'Client: {addr[0]}:{addr[1]} failed to upload to: {args.filedest}\nCaught exception: {ex}')
 
     # check for command mode
     if args.command:
@@ -189,19 +164,16 @@ def run_command(cmd):
 
 
 def main():
-    if not (args.listen or args.upload) and len(args.target) and args.port > 0:
-        if args.upload:
-            print(f'upload_if')
-            pass
-        else:
-            # this is a blocking select on stdin, so CTRL+D to send keyboard interrupt if you screw up (or I did) :P
-            # this is a pretty annoying feature if you do an interactive terminal, but it also lets us pipe stuff in.
-            print(f'reading stdin, use CTRL+D to send EOF')
-            buffer = bytes(sys.stdin.read().encode('utf-8'))
-            # print(f'read this as buffer:\n{buffer.decode("utf-8")}')
+    if not args.listen and len(args.target) and args.port > 0:
+        if sys.stdin.isatty():
+            # print(f'reading stdin, use CTRL+D to send EOF')
+            buffer = b"\n"
 
-        # print(f'Connecting to: {target}')
-        # send data to target
+        else:
+            print(f'input not a TTY, assuming non-interactive, reading stdin from pipe and sending.')
+            buffer = bytes(sys.stdin.read().encode('utf-8'))
+
+        # buffer = bytes(sys.stdin.read().encode('utf-8'))
         client_sender(buffer)
 
     if args.listen:
