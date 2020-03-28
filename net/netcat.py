@@ -163,7 +163,7 @@ def main():
             buffer = b"\n"
 
         else:
-            print(f'input not a TTY, assuming non-interactive, reading stdin from pipe and sending.')
+            print(f'input not a TTY, assuming non-interactive, reading stdin from pipe and sending.\n')
             buffer = bytes(sys.stdin.read().encode('utf-8'))
 
         # buffer = bytes(sys.stdin.read().encode('utf-8'))
