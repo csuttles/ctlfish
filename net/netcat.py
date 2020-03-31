@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import cmd
 import socket
 import subprocess
 import sys
@@ -23,7 +22,7 @@ but you *do* have Python.
 args = parser.parse_args()
 
 
-def client_handler(client_socket,addr):
+def client_handler(client_socket, addr):
     # check for upload mode
     if len(args.filedest):
 
