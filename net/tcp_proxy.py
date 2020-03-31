@@ -40,6 +40,7 @@ def proxy_handler(client_socket, addr, rhost, rport, recvfirst):
         if recvfirst:
             # if so read remote buffer and print it
             remote_buffer = receive_from(remote_socket)
+            print(f'received: {len(remote_buffer)} bytes from: {rhost}:{rport}')
             hexdump(remote_buffer)
 
             # send to response_handler
@@ -47,8 +48,8 @@ def proxy_handler(client_socket, addr, rhost, rport, recvfirst):
 
             # if we have data to send, then send it
             if len(remote_buffer):
-                print(f'sending: {len(remote_buffer)} bytes to: {addr[0]}:{addr[1]}')
                 client_socket.send(remote_buffer)
+                print(f'sent: {len(remote_buffer)} bytes to: {addr[0]}:{addr[1]}')
 
         # now we loop and read from local, send to remote
         while True:
