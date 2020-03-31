@@ -80,7 +80,7 @@ def proxy_handler(client_socket, addr, rhost, rport, recvfirst):
                     print(f'sent: {len(remote_buffer)} bytes to: {addr[0]}:{addr[1]}')
 
                 # if no more data on either side, close connections
-                if not len(local_buffer) or len(remote_buffer):
+                if not len(local_buffer) and not len(remote_buffer):
                     print(f'no more data, closing connections.')
                     client_socket.close()
                     remote_socket.close()
@@ -136,7 +136,7 @@ def receive_from(connection):
     buffer = bytes()
 
     # I ain't got all day - set a timeout
-    connection.settimeout(2)
+    connection.settimeout(10)
 
     try:
         # keep reading until no data or we timeout
