@@ -43,7 +43,7 @@ def proxy_handler(client_socket, addr, rhost, rport, recvfirst):
             print(f'received: {len(remote_buffer)} bytes from: {rhost}:{rport}')
             hexdump(remote_buffer)
 
-            # send to response_handler
+            # send to response_handler (hook where we can change packets)
             remote_buffer = response_handler(remote_buffer)
 
             # if we have data to send, then send it
@@ -59,7 +59,7 @@ def proxy_handler(client_socket, addr, rhost, rport, recvfirst):
                 print(f'received: {len(local_buffer)} bytes from: {addr[0]}:{addr[1]}')
                 hexdump(local_buffer)
 
-                # send to request handler
+                # send to request handler (hook to change packets)
                 local_buffer = request_handler(local_buffer)
 
                 # send to remote
@@ -73,7 +73,7 @@ def proxy_handler(client_socket, addr, rhost, rport, recvfirst):
                     print(f'received: {len(remote_buffer)} bytes from: {rhost}:{rport}')
                     hexdump(remote_buffer)
 
-                    # send to response handler
+                    # send to response handler (hook to change packets)
                     remote_buffer = response_handler(remote_buffer)
 
                     # send response to local socket
@@ -81,9 +81,10 @@ def proxy_handler(client_socket, addr, rhost, rport, recvfirst):
                     print(f'sent: {len(remote_buffer)} bytes to: {addr[0]}:{addr[1]}')
 
                 # if no more data on either side, close connections
-                if not len(local_buffer) and not len(remote_buffer):
-                    print(f'no more data, closing connections.')
-                    client_socket.close()
+                if not len(local_buffer) or not len(remote_buffer):
+                    print(f'no more data, closing connection with {rhost}:{rport}')
+                    # client_socket.close() # this didn't seem like it was working
+                    # also a proxy should continue to listen even if clients come and go
                     remote_socket.close()
                     break
 
@@ -94,17 +95,10 @@ def hexdump(src, length=16, sep='.'):
     """
     result = []
 
-    # Python3 support
-    try:
-        xrange(0, 1)
-    except NameError:
-        xrange = range
-
-    for i in xrange(0, len(src), length):
+    for i in range(0, len(src), length):
         subSrc = src[i:i + length]
         hexa = ''
-        isMiddle = False
-        for h in xrange(0, len(subSrc)):
+        for h in range(0, len(subSrc)):
             if h == length / 2:
                 hexa += ' '
             h = subSrc[h]
@@ -136,8 +130,9 @@ def receive_from(connection):
     """
     buffer = bytes()
 
-    # I ain't got all day - set a timeout
-    connection.settimeout(10)
+    # This timeout gets repeated between each read/send so stay low or things will become very slow.
+    # Removing this makes things break. ;)
+    connection.settimeout(1)
 
     try:
         # keep reading until no data or we timeout
@@ -153,16 +148,14 @@ def receive_from(connection):
     return buffer
 
 
-def request_handler(inbuf):
+def request_handler(buf):
     # this is where we modify packets
-    outbuf = inbuf
-    return outbuf
+    return buf
 
 
-def response_handler(inbuf):
+def response_handler(buf):
     # this is where we modify packets
-    outbuf = inbuf
-    return outbuf
+    return buf
 
 
 def server_loop(lhost, lport, rhost, rport, recvfirst):
@@ -187,8 +180,8 @@ def server_loop(lhost, lport, rhost, rport, recvfirst):
             print(f'accepted connection from: {addr[0]}:{addr[1]}')
 
             # spin off a thread to handle connection
-            client_thread = threading.Thread(target=proxy_handler, args=(client_socket, addr, rhost, rport, recvfirst))
-            client_thread.start()
+            proxy_thread = threading.Thread(target=proxy_handler, args=(client_socket, addr, rhost, rport, recvfirst))
+            proxy_thread.start()
 
 
 def main():
