@@ -56,6 +56,7 @@ except Exception as ex:
 print(f'Got a connection!')
 
 try:
+    # noinspection PyTypeChecker
     this_session = paramiko.Transport(client)
     this_session.add_server_key(host_key)
     server = Server()

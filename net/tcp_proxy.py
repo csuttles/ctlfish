@@ -104,7 +104,7 @@ def hexdump(src, length=16, sep='.'):
             h = subSrc[h]
             if not isinstance(h, int):
                 h = ord(h)
-            h = hex(h).replace('0x', '');
+            h = hex(h).replace('0x', '')
             if len(h) == 1:
                 h = '0' + h
             hexa += h + ' '
