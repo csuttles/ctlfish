@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 
 import argparse
+import readline
 import socket
 import subprocess
 import sys
 import threading
 
+readline.get_history_length()
+# throw this away because we import readline for prompt stuff
 parser = argparse.ArgumentParser(sys.argv[0])
 parser.add_argument('-t', '--target', type=str, dest='target', default='0.0.0.0', help='target')
 parser.add_argument('-p', '--port', type=int, dest='port', default=443, help='TCP port')

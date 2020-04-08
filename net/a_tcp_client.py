@@ -9,6 +9,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-H', '--host', type=str, dest='host', default=None, help='IP addr of host')
 parser.add_argument('-p', '--port', type=int, dest='port', default=80, help='TCP port')
 args = parser.parse_args()
+readline.get_history_length()
+# useless call because we imported readline just for side effects
 
 
 async def main():
@@ -16,6 +18,7 @@ async def main():
     print(f'connected to: {args.host}:{args.port}')
     try:
         while True:
+            # this prompt supports readline automatically because we imported readline
             line = input('> ')
             line += '\n'
             writer.write(bytes(line, "utf-8"))

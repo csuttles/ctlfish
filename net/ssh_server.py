@@ -5,8 +5,11 @@ import os
 import paramiko
 import socket
 import sys
+import readline
 import threading
 
+readline.get_history_length()
+# throw this away because we import readline for prompt stuff
 host_key = paramiko.RSAKey(filename='/etc/ssh/ssh_host_rsa_key')
 priv_key = os.path.expanduser('~/.ssh/id_rsa')
 
@@ -21,9 +24,16 @@ class Server(paramiko.ServerInterface):
             return paramiko.OPEN_SUCCEEDED
         return paramiko.OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED
 
+    def check_auth_password(self, username, password):
+        print(f'Auth attempt with password for user: {username}')
+        if username == 'ctlfish' and password == 'ctlfish':
+            return paramiko.AUTH_SUCCESSFUL
+
+        return paramiko.AUTH_FAILED
+
     def check_auth_publickey(self, username, key):
         if (username):
-        # silly hack for PoC so we don't even check username content.
+        # silly hack for PoC so we don't even check username content and don't leak a username.
         # if (username == 'derp'):
             # dump fingerprint of client key
             print("Auth attempt with key: " + (hexlify(key.get_fingerprint())).decode("utf-8"))
@@ -33,6 +43,7 @@ class Server(paramiko.ServerInterface):
             # success if they are the same key
             if good_pub_key == key:
                 return paramiko.AUTH_SUCCESSFUL
+
         return paramiko.AUTH_FAILED
 
 
@@ -91,7 +102,7 @@ try:
             this_session.close()
             sys.exit(1)
 
-except KeyboardInterrupt:
+except KeyboardInterrupt as ex:
     print(f'caught exception: {ex.__class__()} {str(ex)}')
     try:
         this_session.close()
