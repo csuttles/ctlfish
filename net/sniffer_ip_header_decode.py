@@ -21,24 +21,62 @@ This is a Python program to scan a network for live hosts by spraying UDP traffi
 """
 args = parser.parse_args()
 
-### define ip struct
-#
-#   This is just a map for later to build a class with these types in the right syntax.
-#
-###
-# struct ip {
-#     u_char  ip_hl:4
-#     u_char  ip_v:4
-#     u_char  ip_tos
-#     u_short ip_len
-#     u_short ip_id
-#     u_short ip_off
-#     u_char  ip_ttl
-#     u_char  ip_p
-#     u_short ip_sum
-#     u_long  ip_src
-#     u_long  ip_dst
-# }
+
+class IP(Structure):
+    # https://stackoverflow.com/questions/29306747/python-sniffing-from-black-hat-python-book/29307402
+    # correct data types so that endian-ness is correct/native regardless of platform
+    _fields_ = [
+        ('ihl',             c_ubyte, 4),
+        ('version',         c_ubyte, 4),
+        ('tos',             c_ubyte, 8),
+        ('len',             c_ushort, 16),
+        ('id',              c_ushort, 16),
+        ('flags',           c_ubyte, 3),
+        ('offset',          c_ushort, 13),
+        ('ttl',             c_ubyte, 8),
+        ('protocol_num',    c_ubyte, 8),
+        ('sum',             c_ushort, 16),
+        # ('src',             c_ulong, 32),
+        # ('dst',             c_ulong, 32)
+        ('src',             c_uint32),
+        ('dst',             c_uint32)
+    ]
+
+    def __new__(cls, socket_buffer=None):
+        return cls.from_buffer_copy(socket_buffer)
+
+    def __init__(self, socket_buffer=None):
+
+        # map protocol constants to names
+        self.protocol_map = {1: "ICMP", 6: "TCP", 17: "UDP"}
+
+        # when the examples don't work so you print everything and fix header field lengths 1x1 with RFC magic
+        # _and_ you can use your own blog as reference https://blog.csuttles.io/a-brief-comparison-of-ipv4-and-ipv6/
+        # print(f'ihl: {self.ihl}', len(str(self.ihl)))
+        # print(f'version: {self.version}', len(str(self.version)))
+        # print(f'tos: {self.tos}', len(str(self.tos)))
+        # print(f'len: {self.len}', len(str(self.len)))
+        # print(f'id: {self.id}', len(str(self.id)))
+        # print(f'offset: {self.offset}', len(str(self.offset)))
+        # print(f'ttl: {self.ttl}', len(str(self.ttl)))
+        # print(f'protocol_num: {self.protocol_num}', len(str(self.protocol_num)))
+        # print(f'sum: {self.sum}', len(str(self.sum)))
+        # print(f'src: {self.src}', len(str(self.src)))
+        # print(f'dst: {self.dst}', len(str(self.dst)))
+
+        # readable ip addresses
+        # https://stackoverflow.com/questions/29306747/python-sniffing-from-black-hat-python-book/29307402
+        # correct data types so that endian-ness is correct/native regardless of platform
+        # self.src_address = socket.inet_ntoa(struct.pack("<L", self.src))
+        # self.dst_address = socket.inet_ntoa(struct.pack("<L", self.dst))
+        self.src_address = socket.inet_ntoa(struct.pack("@I", self.src))
+        self.dst_address = socket.inet_ntoa(struct.pack("@I", self.dst))
+
+        # try to map human readable proto
+        try:
+            self.protocol = self.protocol_map[self.protocol_num]
+        except:
+            self.protocol = str(self.protocol_num)
 
 
 def main():
@@ -50,19 +88,32 @@ def main():
 
     # set up raw socket and bind
     sniffer = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket_protocol)
-    sniffer.bind((args.listen,0))
+    sniffer.bind((args.listen, 0))
     # we want to include headers
     sniffer.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
     # if windows explicitly set promiscuous mode
     if os.name == 'nt':
         sniffer.ioctl(socket.SIO_RCVALL, socket.RCVALL_ON)
 
-    # read a single packet
-    data = sniffer.recv(65536)
-    print(data)
-    hexdump(data)
+    # start sniffing and decoding
+    try:
+        while True:
+            # read a single packet - I caught this size error on first read, yay (author uses 65565)
+            raw_buffer = sniffer.recvfrom(65535)[0]
+            if not raw_buffer:
+                break
 
-    # if windows explicitly set promiscuous mode
+            # create ip header from first 32 bytes
+            ip_header = IP(socket_buffer=raw_buffer[0:20])
+
+            # print the decoded protocol and addrs
+            print(f'Protocol: {ip_header.protocol} {ip_header.src_address} -> {ip_header.dst_address}')
+
+    except KeyboardInterrupt:
+        print(f'Caught KB interrupt, exiting.')
+        sys.exit(1)
+
+    # if windows explicitly unset promiscuous mode to clean up
     if os.name == 'nt':
         sniffer.ioctl(socket.SIO_RCVALL, socket.RCVALL_OFF)
 
