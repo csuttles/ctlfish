@@ -16,6 +16,12 @@
 
 This is a fun repo for doing little development doodles that are useful or interesting to me in some way.
 
+### This dir tho?
+
+This is mostly examples (and variations of examples) from the book Black Hat Python by Justin Seitz.
+
+https://nostarch.com/blackhatpython
+
 ## Who is it for
 
 It's mostly for me, but also for everyone.
