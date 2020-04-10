@@ -38,6 +38,8 @@ Send me a PR, and I'll probably accept it. :D
 
 It's related to [my activities on hackthebox.eu](https://www.hackthebox.eu/profile/235518) and other ethical hacking endeavors.
 
+# Examples
+
 ## tcp_proxy.py
 
 ### example/test with ftp
@@ -62,7 +64,7 @@ test it with lftp
 lftp -d -p 9999 127.0.0.1
 ```
 
-### exmaple/test with ssh
+### example/test with ssh
 
 Let's assume your sniffer is still running.
 
