@@ -135,7 +135,7 @@ sudo python3 -m aiosmtpd -n -l 0.0.0.0:25
 ### loop auth attempts with watch
 
 ```
-watch "python3 imap4_login_getmbox.py && python3 smtpdlib_senddata.py"
+watch "python3 imap4_login_getmbox.py && python3 smtpdlib_senddata.py && python3 poplib_senddata.py"
 ```
 
 ### run the sniffer and watch the creds on the wire get caught via scapy magic and regex witchcraft
