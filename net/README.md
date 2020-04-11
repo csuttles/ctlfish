@@ -78,13 +78,13 @@ test it with ssh
 ssh -vvv localhost -p 9999
 ```
 
-## mail_sniffer.py
+## scapy_single_packet.py
 
 This is a test run with a 2 line ish sniffer with python3 on kali 2020
 
 ```
 kali@kali:[~/src/ctlfish/net]:(master *+)
-[Exit: 0] 17:51: sudo python3 mail_sniffer.py
+[Exit: 0] 17:51: sudo python3 scapy_single_packet.py
 ###[ IP ]###
   version   = 4
   ihl       = 5
@@ -115,4 +115,31 @@ kali@kali:[~/src/ctlfish/net]:(master *+)
         load      = 'HTTP/1.1 302 Found\r\nDate: Sat, 11 Apr 2020 00:51:48 GMT\r\nServer: Apache/2.4.10 (Debian)\r\nX-MirrorBrain-Mirror: mirrors.ocf.berkeley.edu\r\nX-MirrorBrain-Realm: country\r\nLink: <http://http.kali.org/kali/pool/main/t/tnscmd10g/tnscmd10g_1.3-1kali0_all.deb.meta4>; rel=describedby; type="application/metalink4+xml"\r\nLink: <http://mirrors.ocf.berkeley.edu/kali/pool/main/t/tnscmd10g/tnscmd10g_1.3-1kali0_all.deb>; rel=duplicate; pri=1; geo=us\r\nLink: <http://kali.download/kali/pool/main/t/tnscmd10g/tnscmd10g_1.3-1kali0_all.deb>; rel=duplicate; pri=2; geo=us\r\nLink: <http://mirror.pwnieexpress.com/kali/pool/main/t/tnscmd10g/tnscmd10g_1.3-1kali0_all.deb>; rel=duplicate; pri=3; geo=us\r\nLink: <http://mirror.anquan.cl/kali/pool/main/t/tnscmd10g/tnscmd10g_1.3-1kali0_all.deb>; rel=duplicate; pri=4; geo=cl\r\nLink: <http://ftp.hands.com/kali/pool/main/t/tnscmd10g/tnscmd10g_1.3-1kali0_all.deb>; rel=duplicate; pri=5; geo=gb\r\nLocation: http://mirrors.ocf.berkeley.edu/kali/pool/main/t/tnscmd10g/tnscmd10g_1.3-1kali0_all.deb\r\nContent-Length: 350\r\nContent-Type: text/html; charset=iso-8859-1\r\n\r\n<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">\n<html><head>\n<title>302 Found</title>\n</head><body>\n<h1>Found</h1>\n<p>The document has moved <a href="http://mirrors.ocf.berkeley.edu/kali/pool/main/t/tnscmd10g/tnscmd10g_1.3-1kali0_all.deb">he'
 
 None
+```
+
+## mail_sniffer.py
+
+Sniff enencrypted mail protocols with scapy
+
+### run dovecot and a dummy smtpd
+
+dovecot provides a simple backend for us to sling imap and pop3 traffic in a loop
+
+
+Run smtpdlib to catch smtp data:
+
+```
+sudo python3 -m aiosmtpd -n -l 0.0.0.0:25
+```
+
+### loop auth attempts with watch
+
+```
+watch "python3 imap4_login_getmbox.py && python3 smtpdlib_senddata.py"
+```
+
+### run the sniffer and watch the creds on the wire get caught via scapy magic and regex witchcraft
+
+```
+sudo python3 mail_sniffer.py
 ```
