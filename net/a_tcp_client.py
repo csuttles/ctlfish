@@ -5,7 +5,7 @@ import asyncio
 import readline
 import sys
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('-H', '--host', type=str, dest='host', default=None, help='IP addr of host')
 parser.add_argument('-p', '--port', type=int, dest='port', default=80, help='TCP port')
 args = parser.parse_args()

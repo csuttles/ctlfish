@@ -161,3 +161,105 @@ Starting sniffer for 1000 packets
 Restoring target: 192.168.1.132
 Completed attack on:  192.168.1.132 results stored in: arper.pcap
 ```
+
+## pic_carver.py
+
+### Setup
+
+Set up opencv and python for your platform https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_tutorials.html
+
+### slice it up
+
+Next, take a packet capture and use it as input. I used one that I got with the arper.py tool in this repo.
+This tool will slice up the pcap and find all the pictures in it sent over HTTP traffic. All the pictures are extracted.
+After extracting a picture, we use opencv to check if the picture includes a faces. If the picture has a face detected,
+we draw a box around the detected face and write a copy of the edited image to another folder.
+
+
+```
+kali@jabroni:[~/src/ctlfish/net]:(master *)
+[Exit: 0] 10:13: ./pic_carver.py --help
+usage: ./pic_carver.py [-h] [-f FACES] [-p PICTURES] [-i--infile INFILE]
+
+This is a Python program to read a packet capture and pull images out of HTTP
+traffic, then detect faces in those images.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FACES, -faces FACES
+                        path to store pictures with faces extracted from pcap
+                        (default: ./faces)
+  -p PICTURES, --pictures PICTURES
+                        patch to store pictures extracted from pcap (default:
+                        ./pictures)
+  -i--infile INFILE     pcap file to read in (default: pic_carver.pcap)
+```
+
+```
+kali@jabroni:[~/src/ctlfish/net]:(master *)
+[Exit: 0] 10:13: ./pic_carver.py -i bigface.pcap
+writing original image to: ./pictures/bigface.pcap-pic_carver_0.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_1.jpeg
+Corrupt JPEG data: premature end of data segment
+writing original image to: ./pictures/bigface.pcap-pic_carver_2.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_3.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_4.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_5.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_6.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_7.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_8.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_9.svg+xml
+writing original image to: ./pictures/bigface.pcap-pic_carver_10.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_11.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_12.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_13.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_14.gif
+writing original image to: ./pictures/bigface.pcap-pic_carver_15.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_16.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_17.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_18.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_19.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_20.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_21.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_22.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_23.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_24.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_25.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_26.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_27.jpeg
+writing facial recognition edited image to: ./faces/bigface.pcap-pic_carver_face_28.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_28.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_29.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_30.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_31.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_32.vnd.microsoft.icon
+writing original image to: ./pictures/bigface.pcap-pic_carver_33.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_34.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_35.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_36.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_37.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_38.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_39.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_40.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_41.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_42.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_43.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_44.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_45.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_46.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_47.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_48.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_49.png
+writing original image to: ./pictures/bigface.pcap-pic_carver_50.jpeg
+writing facial recognition edited image to: ./faces/bigface.pcap-pic_carver_face_51.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_51.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_52.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_53.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_54.jpeg
+writing original image to: ./pictures/bigface.pcap-pic_carver_55.jpeg
+writing facial recognition edited image to: ./faces/bigface.pcap-pic_carver_face_56.jpeg
+all pictures in: ./pictures
+pictures with faces in: ./faces
+carved images: 56
+faces detected: 3
+```

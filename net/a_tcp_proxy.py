@@ -4,7 +4,7 @@ import argparse
 import asyncio
 import sys
 
-parser = argparse.ArgumentParser(sys.argv[0])
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('-r', '--rhost', type=str, dest='rhost', default='127.0.0.1', help='remote host address')
 parser.add_argument('-P', '--rport', type=int, dest='rport', default=9999, help='remote TCP port')
 parser.add_argument('-l', '--lhost', type=str, dest='lhost', default='127.0.0.1', help='local host address')

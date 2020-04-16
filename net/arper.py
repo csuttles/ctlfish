@@ -5,7 +5,7 @@ import argparse
 from scapy.all import *
 from scapy.layers.l2 import ARP, Ether
 
-parser = argparse.ArgumentParser(sys.argv[0])
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('-i', '--interface', type=str, dest='interface', default='eth0',
                     help='interface to use')
 parser.add_argument('-g', '--gateway', type=str, dest='gateway', help='gateway address')

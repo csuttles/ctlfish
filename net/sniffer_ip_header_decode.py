@@ -13,7 +13,7 @@ from ctypes import *
 
 readline.get_history_length()
 # throw this away because we import readline for prompt stuff
-parser = argparse.ArgumentParser(sys.argv[0])
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('-l', '--listen', type=str, dest='listen', default='0.0.0.0',
                     help='address to bind and sniff packets')
 parser.description = """\

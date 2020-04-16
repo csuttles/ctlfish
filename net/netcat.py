@@ -9,7 +9,7 @@ import threading
 
 readline.get_history_length()
 # throw this away because we import readline for prompt stuff
-parser = argparse.ArgumentParser(sys.argv[0])
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('-t', '--target', type=str, dest='target', default='0.0.0.0', help='target')
 parser.add_argument('-p', '--port', type=int, dest='port', default=443, help='TCP port')
 parser.add_argument('-l', '--listen', action='store_true', dest='listen', default=False, help='listen for connections')

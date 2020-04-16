@@ -8,7 +8,7 @@ from scapy.all import *
 from scapy.layers.http import HTTP
 
 
-parser = argparse.ArgumentParser(sys.argv[0])
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('-f', '-faces', type=str, dest='faces', default='./faces',
                     help='path to store pictures with faces extracted from pcap')
 parser.add_argument('-p', '--pictures', type=str, dest='pictures', default='./pictures',
