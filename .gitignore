@@ -1,6 +1,8 @@
 .idea/
 venv/
-net/venv/
 .DS_Store
 scrape/log.txt
 *.pcap
+net/venv/
+net/faces/
+net/pictures/

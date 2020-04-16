@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import os
-import sys
-import threading
-import signal
 
 from scapy.all import *
 from scapy.layers.l2 import ARP, Ether
@@ -19,9 +15,11 @@ parser.add_argument('-c', '--count', type=int, dest='count', default=1000,
 parser.add_argument('-f', '--filename', type=str, dest='filename', default='arper.pcap', help='filename to save pcap')
 
 parser.description = """\
-This is a Python program to perform an arp poisoning attack, and then intercept traffic as MITM (Man In The Middle).
+This is a Python program to perform an arp cache poisoning attack, 
+and then intercept traffic as MITM (Man In The Middle).
 """
 args = parser.parse_args()
+
 
 def get_mac(ip):
     '''

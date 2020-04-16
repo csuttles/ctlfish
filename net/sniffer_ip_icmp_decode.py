@@ -50,20 +50,6 @@ class IP(Structure):
         # map protocol constants to names
         self.protocol_map = {1: "ICMP", 6: "TCP", 17: "UDP"}
 
-        # when the examples don't work so you print everything and fix header field lengths 1x1 with RFC magic
-        # _and_ you can use your own blog as reference https://blog.csuttles.io/a-brief-comparison-of-ipv4-and-ipv6/
-        # print(f'ihl: {self.ihl}', len(str(self.ihl)))
-        # print(f'version: {self.version}', len(str(self.version)))
-        # print(f'tos: {self.tos}', len(str(self.tos)))
-        # print(f'len: {self.len}', len(str(self.len)))
-        # print(f'id: {self.id}', len(str(self.id)))
-        # print(f'offset: {self.offset}', len(str(self.offset)))
-        # print(f'ttl: {self.ttl}', len(str(self.ttl)))
-        # print(f'protocol_num: {self.protocol_num}', len(str(self.protocol_num)))
-        # print(f'sum: {self.sum}', len(str(self.sum)))
-        # print(f'src: {self.src}', len(str(self.src)))
-        # print(f'dst: {self.dst}', len(str(self.dst)))
-
         # readable ip addresses
         # https://stackoverflow.com/questions/29306747/python-sniffing-from-black-hat-python-book/29307402
         # correct data types so that endian-ness is correct/native regardless of platform
