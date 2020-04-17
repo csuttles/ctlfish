@@ -40,6 +40,10 @@ It's related to [my activities on hackthebox.eu](https://www.hackthebox.eu/profi
 
 # Examples
 
+In the examples that follow, the hostname `kali` is a kali linux machine, probably running at least the 2020.1 release.
+The hostname `jabroni` is a mac running recent (2020) Apple stuff and brew packages. Hopefuly this can help provide some context
+on where things should work, although it probably will take a bit of elbow grease and/or configuration on the part of the reader.
+
 ## tcp_proxy.py
 
 ### example/test with ftp
@@ -150,7 +154,7 @@ ARP cache spoofing / MITM attack. Requires ip forwarding to be enabled so we can
 
 ```
 kali@kali:[~/src/ctlfish/net]:(master %)
-[Exit: 0] 10:07: sudo ./arper.py -g 192.168.86.1 -t 192.168.86.132 -i eth0 -f arper.pcap
+[Exit: 0] 10:07: sudo ./arper.py -g 192.168.1.1 -t 192.168.1.132 -i eth0 -f arper.pcap
 Setting up to sniff on interface: eth0
 Getting MAC addr for gateway: 192.168.1.1
 Gateway: 192.168.1.1 is at: 1c:fd:11:0f:4e:9e
@@ -200,57 +204,9 @@ kali@jabroni:[~/src/ctlfish/net]:(master *)
 [Exit: 0] 10:13: ./pic_carver.py -i bigface.pcap
 writing original image to: ./pictures/bigface.pcap-pic_carver_0.png
 writing original image to: ./pictures/bigface.pcap-pic_carver_1.jpeg
-Corrupt JPEG data: premature end of data segment
 writing original image to: ./pictures/bigface.pcap-pic_carver_2.jpeg
 writing original image to: ./pictures/bigface.pcap-pic_carver_3.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_4.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_5.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_6.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_7.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_8.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_9.svg+xml
-writing original image to: ./pictures/bigface.pcap-pic_carver_10.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_11.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_12.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_13.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_14.gif
-writing original image to: ./pictures/bigface.pcap-pic_carver_15.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_16.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_17.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_18.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_19.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_20.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_21.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_22.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_23.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_24.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_25.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_26.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_27.jpeg
-writing facial recognition edited image to: ./faces/bigface.pcap-pic_carver_face_28.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_28.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_29.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_30.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_31.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_32.vnd.microsoft.icon
-writing original image to: ./pictures/bigface.pcap-pic_carver_33.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_34.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_35.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_36.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_37.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_38.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_39.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_40.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_41.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_42.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_43.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_44.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_45.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_46.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_47.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_48.jpeg
-writing original image to: ./pictures/bigface.pcap-pic_carver_49.png
-writing original image to: ./pictures/bigface.pcap-pic_carver_50.jpeg
+...
 writing facial recognition edited image to: ./faces/bigface.pcap-pic_carver_face_51.jpeg
 writing original image to: ./pictures/bigface.pcap-pic_carver_51.jpeg
 writing original image to: ./pictures/bigface.pcap-pic_carver_52.jpeg
