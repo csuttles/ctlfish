@@ -5,7 +5,6 @@ import os
 import psutil
 import queue
 import requests
-import sys
 import threading
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -17,8 +16,6 @@ parser.add_argument('-w', '--workers', type=int, dest='threads', default=psutil.
                     help='number of worker threads to spawn')
 parser.add_argument('-f', '--filter', type=str, nargs='+', dest='filters',
                     default=['.png', '.gif', '.jpg', '.jpeg', '.css'], help='file suffixes to filter out')
-parser.add_argument('-e', '--exit-on-fail', action='store_true', default=False, dest='exit',
-                    help='exit non-zero if we see a connection error if true, otherwise connection errors are ignored')
 parser.description = '''
 This script will brute force a remote machine over http to discover directories by walking your local 
 directory to build a list of paths to check, then spawn a pool of threads to check them on the target.
@@ -57,10 +54,8 @@ def test_remote():
             print(f'{resp.status_code} => {rel_url}')
         except Exception as ex:
             print(f'caught exception: {ex.__class__.__name__} - {ex}')
-            if args.exit:
-                sys.exit(1)
-            else:
-                pass
+            # mostly just catches connection errors to suppress them
+            pass
 
 
 for tid in range(args.threads):
