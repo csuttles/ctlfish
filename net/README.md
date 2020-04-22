@@ -226,3 +226,84 @@ pictures with faces in: ./faces
 carved images: 56
 faces detected: 3
 ```
+
+## content_bruter.py
+
+This is a brute force tool for discovering content over http
+
+### run the tool with mostly default options and a popular seclist
+
+My SecLists dir is the venerated [SecLists by Daniel Miessler](https://github.com/danielmiessler/SecLists), but of course you can use any wordlist you like with the tool.
+
+```
+kali@jabroni:[~/src/ctlfish/net]:(master *)
+[Exit: 1] 10:05: ./content_bruter.py -u 'http://testphp.vulnweb.com' -w ~/src/SecLists/Discovery/Web-Content/common.txt -m 'head' -f -c 404,429  -a ctlfish -e .php .cgi
+url: http://testphp.vulnweb.com
+wordlist: /Users/csuttles/src/SecLists/Discovery/Web-Content/common.txt
+firehose: True
+threads: 16
+method: head
+useragent: ctlfish
+hidecodes: [404, 429]
+extensions: ['.php', '.cgi']
+spawning thread: 0
+spawning thread: 1
+spawning thread: 2
+spawning thread: 3
+spawning thread: 4
+spawning thread: 5
+spawning thread: 6
+spawning thread: 7
+spawning thread: 8
+spawning thread: 9
+spawning thread: 10
+spawning thread: 11
+spawning thread: 12
+spawning thread: 13
+spawning thread: 14
+spawning thread: 15
+200 => http://testphp.vulnweb.com/CVS/Repository
+200 => http://testphp.vulnweb.com/CVS/Entries
+200 => http://testphp.vulnweb.com/CVS/Root
+301 => http://testphp.vulnweb.com/CVS
+200 => http://testphp.vulnweb.com/CVS/
+301 => http://testphp.vulnweb.com/admin
+200 => http://testphp.vulnweb.com/admin/
+403 => http://testphp.vulnweb.com/cgi-bin
+403 => http://testphp.vulnweb.com/cgi-bin/
+403 => http://testphp.vulnweb.com/cgi-bin//
+403 => http://testphp.vulnweb.com/cgi-bin/
+200 => http://testphp.vulnweb.com/crossdomain.xml
+200 => http://testphp.vulnweb.com/favicon.ico
+301 => http://testphp.vulnweb.com/images
+200 => http://testphp.vulnweb.com/images/
+200 => http://testphp.vulnweb.com/index.php
+301 => http://testphp.vulnweb.com/pictures
+200 => http://testphp.vulnweb.com/pictures/
+301 => http://testphp.vulnweb.com/secured
+200 => http://testphp.vulnweb.com/secured/
+all done.
+```
+
+
+### watch traffic via tshark
+
+I grabbed the ip address for testphp.vulnweb.com via `dig +short testphp.vulnweb.com`, which is the host I am filtering here (176.28.50.165).
+
+One reason to do this with tshark is that you can leverage the displayfilters. I also like to do `-O http` for details on _just_ http.
+
+```
+kali@jabroni:[~/src/ctlfish/net]:(master)
+[Exit: 0] 07:24: sudo tshark -i en0 -nn -Y 'ip.host == "176.28.50.165" and http'
+Capturing on 'Wi-Fi: en0'
+   67   0.146576 192.168.86.102 → 176.28.50.165 HTTP 214 HEAD /analog.html/ HTTP/1.1
+   68   0.146662 192.168.86.102 → 176.28.50.165 HTTP 210 HEAD /amember/ HTTP/1.1
+   70   0.149519 192.168.86.102 → 176.28.50.165 HTTP 210 HEAD /analyse/ HTTP/1.1
+   71   0.149667 192.168.86.102 → 176.28.50.165 HTTP 209 HEAD /analog/ HTTP/1.1
+   75   0.153132 192.168.86.102 → 176.28.50.165 HTTP 212 HEAD /analytics/ HTTP/1.1
+   76   0.153193 192.168.86.102 → 176.28.50.165 HTTP 211 HEAD /analysis/ HTTP/1.1
+   90   0.169928 192.168.86.102 → 176.28.50.165 HTTP 205 HEAD /and HTTP/1.1
+  108   0.192590 192.168.86.102 → 176.28.50.165 HTTP 209 HEAD /android HTTP/1.1
+  124   0.224251 192.168.86.102 → 176.28.50.165 HTTP 210 HEAD /announce HTTP/1.1
+  125   0.225749 192.168.86.102 → 176.28.50.165 HTTP 214 HEAD /announcement HTTP/1.1
+```

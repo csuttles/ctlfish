@@ -40,7 +40,7 @@ parser.add_argument('-a', '--agent', type=str, dest='useragent',
                     default='Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:40.0) Gecko/20100101 Firefox/40.0',
                     help='User-Agent to use for requests')
 parser.add_argument('-c', '--hide-codes', type=lambda s: [int(c) for c in s.split(',')], default=[404],
-                    dest='hidecodes', help='list of http status codes to hide, comma-delimited')
+                    dest='hidecodes', help='list of http status codes to hide, comma-delimited. Use 0 to show all.')
 parser.add_argument('-e', '--extensions', nargs='+', default=['.php'], dest='extensions',
                     help='list of extensions to check. must include delimiter (".php" not "php")')
 parser.description = '''
