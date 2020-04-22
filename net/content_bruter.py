@@ -9,6 +9,21 @@ import threading
 
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+'''
+IANAL but:
+
+At the time of writing, this website allows testing tools and manual hacking against this intentionally vulnerable app.
+It is your responsibility to use this code only for good. It is your responsibility to make sure that if you run this, 
+you do not break the law.
+
+Right now, this is included in the response from http://testphp.vulnweb.com/
+
+Warning: This is not a real shop. This is an example PHP application, which is intentionally vulnerable to web attacks. 
+It is intended to help you test Acunetix.
+It also helps you understand how developer errors and bad configuration may let someone break into your website. 
+You can use it to test other tools and your manual hacking skills as well. 
+Tip: Look for potential SQL Injections, Cross-site Scripting (XSS), and Cross-site Request Forgery (CSRF), and more.
+'''
 parser.add_argument('-u', '--url', type=str, dest='url', default='http://testphp.vulnweb.com',
                     help='your target scheme and host')
 parser.add_argument('-w', '--wordlist', type=str, dest='wordlist',
@@ -27,7 +42,6 @@ parser.add_argument('-c', '--hide-codes', type=lambda s: [int(c) for c in s.spli
                     dest='hidecodes', help='list of http status codes to hide, comma-delimited')
 parser.add_argument('-e', '--extensions', nargs='+', default=['.php'], dest='extensions',
                     help='list of extensions to check. must include delimiter (".php" not "php")')
-# parser.add_argument('-c', '--hide-code', nargs='+', default=['404'], help='list of http status codes to hide')
 parser.description = '''
 This script will brute force content on a web server. 
 Think wfuzz, but what would it be if you just made it up on the spot?

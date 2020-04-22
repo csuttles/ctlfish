@@ -30,6 +30,13 @@ It's mostly for me, but also for everyone.
 
 IANAL - [MIT license](https://opensource.org/licenses/MIT)
 
+## IANAL
+
+I am not a lawyer
+
+It is your responsibility to use this code only for good. It is your responsibility to make sure that if you run this,
+you do not break the law.
+
 ## Feature requests and bugfixes
 
 Send me a PR, and I'll probably accept it. :D
