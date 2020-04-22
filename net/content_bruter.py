@@ -8,7 +8,6 @@ import requests
 import threading
 
 
-parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 '''
 IANAL but:
 
@@ -24,6 +23,8 @@ It also helps you understand how developer errors and bad configuration may let 
 You can use it to test other tools and your manual hacking skills as well. 
 Tip: Look for potential SQL Injections, Cross-site Scripting (XSS), and Cross-site Request Forgery (CSRF), and more.
 '''
+
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('-u', '--url', type=str, dest='url', default='http://testphp.vulnweb.com',
                     help='your target scheme and host')
 parser.add_argument('-w', '--wordlist', type=str, dest='wordlist',
@@ -66,8 +67,8 @@ def dir_brute(terms_q, extensions=None):
         # build out a map of attempts / variations for this term
         if args.firehose:
             # add as both a "file" and a "dir" to maximize wordlists
-            attempt_list.append(f'/{attempt}/')
             attempt_list.append(f'/{attempt}')
+            attempt_list.append(f'/{attempt}/')
 
         else:
             # check for file ext to determine if we want to do dir things of file things
@@ -118,12 +119,15 @@ def dump_q(terms_q):
 
 
 def main():
-    print(args)
+    # dump args
+    for arg in vars(args):
+        print(f'{arg}: {getattr(args, arg)}')
 
     words = build_terms_q(args.wordlist)
 
     threads = []
     for tid in range(args.threads):
+        # dump thread info
         print(f'spawning thread: {tid}')
         t = threading.Thread(target=dir_brute, args=(words, args.extensions), name=f'worker-{tid}')
         threads.append(t)
