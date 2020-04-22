@@ -43,7 +43,7 @@ Send me a PR, and I'll probably accept it. :D
 
 ## What's with the name?
 
-It's related to [my activities on hackthebox.eu](https://www.hackthebox.eu/profile/235518) and other ethical hacking endeavors.
+It's related to [my activities on hackthebox.eu](https://www.hackthebox.eu/profile/235518) and other CTF and infosec things
 
 # Examples
 
