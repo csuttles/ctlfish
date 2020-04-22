@@ -13,7 +13,7 @@ parser.add_argument('-t', '--target', type=str, dest='target', default='http://l
 parser.add_argument('-d', '--directory', type=str, dest='dir', default='/tmp',
                     help='local directory to use')
 parser.add_argument('-w', '--workers', type=int, dest='threads', default=psutil.cpu_count(),
-                    help='number of worker threads to spawn')
+                    help='number of worker threads to spawn, default is number of cores in system')
 parser.add_argument('-f', '--filter', type=str, nargs='+', dest='filters',
                     default=['.png', '.gif', '.jpg', '.jpeg', '.css'], help='file suffixes to filter out')
 parser.description = '''
