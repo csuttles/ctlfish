@@ -3,3 +3,5 @@ scapy>=git_archive.dev304758016
 paramiko>=2.4.2
 psutil>=5.6.7
 requests>=2.22.0
+# csuttles: note to self
+# powerline-status
