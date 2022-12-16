@@ -188,7 +188,7 @@ we draw a box around the detected face and write a copy of the edited image to a
 
 
 ```
-kali@jabroni:[~/src/ctlfish/net]:(master *)
+kali@kali:[~/src/ctlfish/net]:(master *)
 [Exit: 0] 10:13: ./pic_carver.py --help
 usage: ./pic_carver.py [-h] [-f FACES] [-p PICTURES] [-i--infile INFILE]
 
@@ -207,7 +207,7 @@ optional arguments:
 ```
 
 ```
-kali@jabroni:[~/src/ctlfish/net]:(master *)
+kali@kali:[~/src/ctlfish/net]:(master *)
 [Exit: 0] 10:13: ./pic_carver.py -i bigface.pcap
 writing original image to: ./pictures/bigface.pcap-pic_carver_0.png
 writing original image to: ./pictures/bigface.pcap-pic_carver_1.jpeg
@@ -236,7 +236,7 @@ This is a brute force tool for discovering content over http
 My SecLists dir is the venerated [SecLists by Daniel Miessler](https://github.com/danielmiessler/SecLists), but of course you can use any wordlist you like with the tool.
 
 ```
-kali@jabroni:[~/src/ctlfish/net]:(master *)
+kali@kali:[~/src/ctlfish/net]:(master *)
 [Exit: 1] 10:05: ./content_bruter.py -u 'http://testphp.vulnweb.com' -w ~/src/SecLists/Discovery/Web-Content/common.txt -m 'head' -f -c 404,429  -a ctlfish -e .php .cgi
 url: http://testphp.vulnweb.com
 wordlist: /Users/csuttles/src/SecLists/Discovery/Web-Content/common.txt
@@ -293,7 +293,7 @@ I grabbed the ip address for testphp.vulnweb.com via `dig +short testphp.vulnweb
 One reason to do this with tshark is that you can leverage the displayfilters. I also like to do `-O http` for details on _just_ http.
 
 ```
-kali@jabroni:[~/src/ctlfish/net]:(master)
+kali@kali:[~/src/ctlfish/net]:(master)
 [Exit: 0] 07:24: sudo tshark -i en0 -nn -Y 'ip.host == "176.28.50.165" and http'
 Capturing on 'Wi-Fi: en0'
    67   0.146576 192.168.86.102 → 176.28.50.165 HTTP 214 HEAD /analog.html/ HTTP/1.1
@@ -313,7 +313,7 @@ Capturing on 'Wi-Fi: en0'
 set up a local joomla env with the excellent https://github.com/vulhub/vulhub
 
 ```
-kali@jabroni:[~/src/vulhub/joomla/CVE-2015-8562]:(master *)
+kali@kali:[~/src/vulhub/joomla/CVE-2015-8562]:(master *)
 [Exit: 0] 10:20: docker-compose up -d
 Starting cve-2015-8562_mysql_1 ... done
 Starting cve-2015-8562_web_1   ... done
@@ -325,7 +325,7 @@ in a good place in my default wordlist for testing.
 stage your favorite wordlists and smash up the joomla anti-brute force like it isn't even there!
 
 ```
-kali@jabroni:[~/src/ctlfish/net]:(master *%)
+kali@kali:[~/src/ctlfish/net]:(master *%)
 [Exit: 0] 13:02: time ./joomla_smash.py -q
 finished setup for username: admin
 Bruteforce succeeded!
@@ -336,7 +336,7 @@ Waiting for other threads to exit...
 real    1m19.106s
 user    0m40.530s
 sys     0m1.189s
-kali@jabroni:[~/src/ctlfish/net]:(master *%)
+kali@kali:[~/src/ctlfish/net]:(master *%)
 [Exit: 0] 13:06: ./joomla_smash.py --help
 usage: joomla_smash.py [-h] [-u URL] [-w WORDLIST] [-t THREADS] [-U USER] [-q]
 
